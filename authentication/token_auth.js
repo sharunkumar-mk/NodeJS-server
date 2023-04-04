@@ -7,7 +7,8 @@ exports.verifyToken = (req, res, next) => {
     res.status(401).send({ error: "Token required" });
   }
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, "skey", (err, decoded) => {
+
+  jwt.verify(token, "SKEY", (err, decoded) => {
     if (err) {
       res.status(500).send({ error: "Authentication failed" });
     } else {

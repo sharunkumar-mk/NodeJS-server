@@ -1,0 +1,1 @@
+const checkRole = (role) => (re) => {};

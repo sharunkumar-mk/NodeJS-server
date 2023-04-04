@@ -1,0 +1,12 @@
+{
+  "name": "products",
+  "attributes": {
+    "name": { "type": "string" },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "files", "videos", "audios"]
+    }
+  }
+}
