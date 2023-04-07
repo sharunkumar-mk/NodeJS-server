@@ -1,7 +1,7 @@
 const db = require("../Database/db_config.js");
 const jwt = require("jsonwebtoken");
 
-exports.jwtLogin = (req, res) => {
+module.exports = jwtLogin = (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const LoginQuery =
@@ -20,9 +20,6 @@ exports.jwtLogin = (req, res) => {
         };
 
         const accessToken = jwt.sign(user, "SKEY", { expiresIn: 600000 });
-
-        console.log(jwt.decode(accessToken));
-
         res.status(200).send({
           accessToken: accessToken,
           // user: {
