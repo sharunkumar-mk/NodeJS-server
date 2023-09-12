@@ -5,6 +5,7 @@ const {
   createModel,
   deleteModel,
   getModel,
+  getModelInfo,
 } = require("./config/model_config.js");
 
 const {
@@ -22,6 +23,8 @@ const {
   updateMedia,
 } = require("./config/media_config.js");
 const express = require("express");
+const path = require("path");
+
 app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -32,13 +35,11 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.listen(process.env.PORT_NUMBER, () => {
-  console.log("Server running in " + process.env.PORT_NUMBER);
-});
+// Serve static files
+app.use(express.static(path.join(__dirname, "views")));
 
 //core api calls
 app.post("/api/auth/login", jwtLogin);
-
 app.get("/api/models", getModel);
 app.post("/api/models", createModel);
 app.delete("/api/models", deleteModel);
@@ -50,25 +51,30 @@ app.put("/api/media", updateMedia);
 
 //generate dynamic model api calls
 function generateModelEndpoint(model) {
-  app.post(
-    `/api/${model.name}`,
-    verifyToken,
-    postService(readSchema(model.schemaPath))
-  );
+  app.post(`/api/${model.apiId}`, postService(readSchema(model.schemaPath)));
   app.get(
-    `/api/${model.name}`,
-    verifyToken,
+    `/api/${model.apiId}`,
+    // verifyToken,
     getService(readSchema(model.schemaPath))
   );
   app.put(
-    `/api/${model.name}`,
+    `/api/${model.apiId}`,
     verifyToken,
     putService(readSchema(model.schemaPath))
   );
   app.delete(
-    `/api/${model.name}`,
+    `/api/${model.apiId}`,
 
     deleteService(readSchema(model.schemaPath))
   );
 }
 models.forEach((model) => generateModelEndpoint(model));
+
+// Handle all other routes and serve the index.html file
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "index.html"));
+});
+
+app.listen(process.env.PORT_NUMBER, () => {
+  console.log("Server running in " + process.env.PORT_NUMBER);
+});

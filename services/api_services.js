@@ -62,9 +62,11 @@ const postService = (model) => async (req, res) => {
 
 //get service
 const getService = (model) => async (req, res) => {
-  const id = req.body.id;
+  const id = req.query.id;
   const keys = Object.keys(model.attributes);
   const values = Object.values(model.attributes);
+
+  const data = [];
 
   const imageUrlField = keys.find((key, index) => {
     return values[index].type === "media";
@@ -86,10 +88,17 @@ const getService = (model) => async (req, res) => {
       INNER JOIN files ON file_model_links.file_id = files.id
     `
     : `SELECT * FROM ${model.name}`;
-
   try {
     const result = await executeQuery(sqlSelect, [id]);
-    res.send(result);
+    const data = result.map((row) => {
+      const { id, created_at, ...attributes } = row;
+      return {
+        id,
+        created_at,
+        attributes,
+      };
+    });
+    res.send(data);
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal server error");
@@ -123,8 +132,9 @@ const putService = (model) => async (req, res) => {
 
       const sqlUpdate = `UPDATE ${modelName} SET ? WHERE id = ?`;
       await executeQuery(sqlUpdate, [modelData, id]);
-      const data = await executeQuery(`SELECT * FROM ${modelName}`);
-      res.send(data);
+      const result = await executeQuery(`SELECT * FROM ${modelName}`);
+
+      res.send(result);
     });
   } catch (err) {
     console.log(err);
@@ -137,7 +147,6 @@ const deleteService = (model) => async (req, res) => {
   const modelName = model.name;
   const keys = Object.keys(model.attributes);
   const values = Object.values(model.attributes);
-
   const isMedia = keys.find((key, index) => {
     return values[index].type === "media";
   });

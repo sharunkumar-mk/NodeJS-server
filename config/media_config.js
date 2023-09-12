@@ -20,11 +20,14 @@ const multerMediaUpdate = multer({ storage: storage }).single("media");
 
 const postMedia = (req, res) => {
   multerMediaUpload(req, res, async (err) => {
+    console.log(req.files);
+
     if (err instanceof multer.MulterError) {
       return res.status(500).json({ error: err.message });
     } else if (err) {
       return res.status(500).json({ error: err.message });
     }
+
     const files = req.files;
     if (files) {
       for (const file of files) {
@@ -32,12 +35,17 @@ const postMedia = (req, res) => {
           name: file.originalname,
           mime: file.mimetype,
           size: file.size,
-          path: file.path,
-          folder_path: file.destination.replace("./public", ""),
+          path: file.path.replace("public/", ""),
+          folder_path: file.destination,
         };
         await executeQuery(`INSERT INTO files SET ?`, fileData);
       }
-      res.send("Files uploaded successfully");
+
+      const sqlSelect = `SELECT * FROM files`;
+      const result = await executeQuery(sqlSelect);
+      res.send(result);
+
+      // res.send("Files uploaded successfully");
     } else {
       res.status(500).send("Internal server error");
     }
@@ -117,7 +125,7 @@ const deleteMedia = async (req, res) => {
       ids,
     ]);
     files.forEach((file) => {
-      unlinkAsync(file.path);
+      unlinkAsync(`./public/${file.path}`);
     });
     await executeQuery(`DELETE FROM files WHERE id IN (?)`, [ids]);
     const data = await executeQuery(`SELECT * FROM files`);
