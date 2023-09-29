@@ -1,0 +1,1 @@
+{"name":"Office","secured":false,"apiID":"office","attributes":{"name":{"type":"string"},"email":{"type":"string"},"address":{"type":"string"},"state":{"type":"string"},"nation":{"type":"string"},"website":{"type":"string"},"adhar":{"type":"string"},"pan":{"type":"string"}}}

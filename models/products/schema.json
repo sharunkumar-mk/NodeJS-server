@@ -1,0 +1,1 @@
+{"name":"Products","secured":false,"apiID":"products","attributes":{"product_price":{"type":"Number"},"Product_name":{"type":"Text"},"Product_tag":{"type":"Text"}}}

@@ -2,10 +2,17 @@ require("dotenv").config();
 const verifyToken = require("./authentication/token_auth.js");
 const jwtLogin = require("./authentication/jwt_login.js");
 const {
+  getAdminUsers,
+  deleteAdminUsers,
+  addAdminUsers,
+  updateAdminUsers,
+} = require("./services/admin_services.js");
+
+const {
   createModel,
   deleteModel,
   getModel,
-  getModelInfo,
+  // getModelInfo,
 } = require("./config/model_config.js");
 
 const {
@@ -40,6 +47,12 @@ app.use(express.static(path.join(__dirname, "views")));
 
 //core api calls
 app.post("/api/auth/login", jwtLogin);
+
+app.post("/api/users", addAdminUsers);
+app.get("/api/users", getAdminUsers);
+app.delete("/api/users", deleteAdminUsers);
+app.put("/api/users", updateAdminUsers);
+
 app.get("/api/models", getModel);
 app.post("/api/models", createModel);
 app.delete("/api/models", deleteModel);

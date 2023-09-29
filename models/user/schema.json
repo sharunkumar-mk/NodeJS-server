@@ -1,0 +1,1 @@
+{"name":"User","secured":true,"apiID":"user","attributes":{"name":{"type":"string"},"email":{"type":"string"}}}

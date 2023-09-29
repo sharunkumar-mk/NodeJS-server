@@ -1,0 +1,12 @@
+{
+  "name": "Collage",
+  "secured": false,
+  "apiID": "collage",
+  "attributes": {
+    "name": { "type": "string" },
+    "email": { "type": "string" },
+    "address": { "type": "string" },
+    "state": { "type": "string" },
+    "nation": { "type": "string" }
+  }
+}
