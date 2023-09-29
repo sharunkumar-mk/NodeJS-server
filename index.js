@@ -84,9 +84,9 @@ function generateModelEndpoint(model) {
 models.forEach((model) => generateModelEndpoint(model));
 
 // Handle all other routes and serve the index.html file
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "views", "index.html"));
+// });
 
 app.listen(process.env.PORT_NUMBER, () => {
   console.log("Server running in " + process.env.PORT_NUMBER);
