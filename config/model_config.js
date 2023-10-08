@@ -33,15 +33,20 @@ const createModel = async (req, res) => {
     const createTableQuery = `
     CREATE TABLE ${apiId} (${queryLine})`;
     const modelInfoQuery = `INSERT INTO models SET ?`;
+    const apiInsert = "INSERT INTO api SET ?";
     modelInfo = {
       name: apiId,
     };
-
+    apiData = {
+      url: `api/${apiId}`,
+      model: apiId,
+    };
     if (fs.existsSync(`${modelPath}${apiId}`)) {
       res.status(400).send("Model already exist choose different model name");
     } else {
       await executeQuery(createTableQuery);
       await executeQuery(modelInfoQuery, modelInfo);
+      await executeQuery(apiInsert, apiData);
       const jsonSchema = JSON.stringify(model);
 
       //code for create model schema file

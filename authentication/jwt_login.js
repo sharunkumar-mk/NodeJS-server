@@ -30,7 +30,7 @@ module.exports = jwtLogin = (req, res) => {
                 status: users[0].status,
               };
 
-              const accessToken = jwt.sign(user, "SKEY", { expiresIn: 6 });
+              const accessToken = jwt.sign(user, "SKEY", { expiresIn: 600000 });
               res.status(200).send({
                 accessToken: accessToken,
                 user: {

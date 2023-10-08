@@ -1,5 +1,5 @@
 require("dotenv").config();
-const verifyToken = require("./authentication/token_auth.js");
+const { verifyToken } = require("./authentication/token_auth.js");
 const jwtLogin = require("./authentication/jwt_login.js");
 const {
   getAdminUsers,
@@ -9,10 +9,16 @@ const {
 } = require("./services/admin_services.js");
 
 const {
+  getApis,
+  generateApiToken,
+  verifyApiToken,
+  getTokenList,
+} = require("./config/api_config.js");
+
+const {
   createModel,
   deleteModel,
   getModel,
-  // getModelInfo,
 } = require("./config/model_config.js");
 
 const {
@@ -42,6 +48,11 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//api urls
+app.get("/api", verifyApiToken, getApis);
+app.post("/api/token/list", getTokenList);
+app.post("/api/token", generateApiToken);
+
 // Serve static files
 app.use(express.static(path.join(__dirname, "views")));
 
@@ -67,7 +78,7 @@ function generateModelEndpoint(model) {
   app.post(`/api/${model.apiId}`, postService(readSchema(model.schemaPath)));
   app.get(
     `/api/${model.apiId}`,
-    // verifyToken,
+    verifyApiToken || verifyToken,
     getService(readSchema(model.schemaPath))
   );
   app.put(

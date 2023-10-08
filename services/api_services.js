@@ -35,7 +35,6 @@ const postService = (model) => async (req, res) => {
       res.status(400).send("Empty data");
     } else {
       const modelInserted = await executeQuery(modelInsert, modelData);
-      console.log(modelInserted.insertId);
       const data = await executeQuery(`SELECT * FROM ${modelName}`);
       const file = await executeQuery(fileSelect, [ids]);
 
@@ -52,7 +51,6 @@ const postService = (model) => async (req, res) => {
         }
       }
 
-      console.log(file);
       res.send(data);
     }
   } catch (err) {

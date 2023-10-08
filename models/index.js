@@ -1,10 +1,5 @@
 module.exports = [
   {
-    "name": "student",
-    "apiId": "student",
-    "schemaPath": "models/student/"
-  },
-  {
     "name": "user",
     "apiId": "user",
     "schemaPath": "models/user/"
@@ -23,5 +18,10 @@ module.exports = [
     "name": "products",
     "apiId": "products",
     "schemaPath": "models/products/"
+  },
+  {
+    "name": "sharun",
+    "apiId": "sharun",
+    "schemaPath": "models/sharun/"
   }
 ]
